@@ -142,7 +142,7 @@ Allows users to reset their password using a valid reset token. It updates the u
 To start the server, run:
 
 ```bash
-npm start
+npm run devStart
 ```
 
 The server will start listening on port 3000 by default.
