@@ -1,2 +1,4 @@
-/node_modules
-/.env
+.env
+node_modules/
+
+just testing to be sure that my .env and nodemodules are properly ignored😊👍
