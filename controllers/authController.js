@@ -3,8 +3,9 @@ const jwt = require("jsonwebtoken")
 const nodemailer = require("nodemailer")
 const Mailgen = require("mailgen")
 const config = require("../config/config")
+
 // Import all models from a single file
-const models = require("./models")
+const models = require("../models")
 const User = models.User
 
 const generateToken = (user) => {
