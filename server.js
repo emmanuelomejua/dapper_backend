@@ -28,3 +28,4 @@ app.use(express.json())
 app.use(cors())
 app.use("/api/auth", Routes.authRoutes)
 app.use("/api/orders", Routes.ordersRoutes)
+app.use("/api/cart", Routes.cartRoutes);
