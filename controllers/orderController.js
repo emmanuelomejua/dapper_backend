@@ -1,5 +1,6 @@
 const { Order } = require("../models")
 const { OrderItem } = require("../models/orderItem")
+const cron = require("node-cron")
 
 const createOrder = async (req, res) => {
 	try {
@@ -79,10 +80,50 @@ const getOrderById = async (req, res) => {
 	}
 }
 
-const updateOrder = (req, res) => {
-	// try {
-	// } catch (error) {
-	// }
+const updateOrderStatusAuto = async () => {
+	try {
+		const ordersToUpdate = await Order.find({
+			status: "pending",
+			createdAt: { $lte: new Date(Date.now() - 24 * 60 * 60 * 1000) },
+		})
+
+		await Promise.all(
+			ordersToUpdate.map(async (order) => {
+				order.status = "approved"
+				await order.save()
+			})
+		)
+
+		console.log("Order status updated successfully.")
+	} catch (error) {
+		console.error("Error updating order status:", error)
+	}
+}
+
+const updateOrderStatusAdmin = async (req, res) => {
+	try {
+		const { orderId } = req.params
+		const { status } = req.body
+		if (!orderId) return res.status(400).json({ error: "Produce a valid order ID" })
+
+		const updatedOrder = await Order.findByIdAndUpdate(
+			orderId,
+			{ status: status ? status : "approved" },
+			{ new: true, runValidators: true }
+		)
+
+		if (!updatedOrder) {
+			return res.status(404).json({ message: "Order not found" })
+		}
+
+		return res.status(200).json({ order: updatedOrder })
+	} catch (error) {
+		if (error.name === "ValidationError") {
+			return res.status(400).json({ error: error.message })
+		}
+		console.error("Error updating order:", error)
+		return res.status(500).json({ error: "Internal server error" })
+	}
 }
 
 const deleteOrder = async (req, res) => {
@@ -103,10 +144,12 @@ const deleteOrder = async (req, res) => {
 	}
 }
 
+cron.schedule("0 0 * * *", updateOrderStatusAuto)
+
 module.exports = {
 	createOrder,
 	getAllOrders,
 	getOrderById,
-	updateOrder,
+	updateOrderStatusAdmin,
 	deleteOrder,
 }
