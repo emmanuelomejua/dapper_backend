@@ -45,9 +45,9 @@ const createOrder = async (req, res) => {
 			})
 		}
 
-		res.status(200).json({ success: true, authUrl, message: "Order created successfully." })
+		res.status(201).json({ message: "Order created successfully." })
 	} catch (error) {
-		// console.log(error.response.data)
+		console.log("Create order error", error)
 		res.status(500).json({
 			success: false,
 			error: error.message,
@@ -56,15 +56,27 @@ const createOrder = async (req, res) => {
 }
 
 const getAllOrders = async (req, res) => {
-	// try {
-	// } catch (error) {
-	// }
+	try {
+		const orders = await Order.find({})
+		if (!orders) return res.status(404).json({ error: "Cannot fetch orders" })
+		return res.status(200).json(orders)
+	} catch (error) {
+		console.log("Get all orders error:", error)
+		res.status(500).json({ message: "Internal server error" })
+	}
 }
 
 const getOrderById = async (req, res) => {
-	// try {
-	// } catch (error) {
-	// }
+	try {
+		const { orderId } = req.body
+		if (!orderId) return res.status(400).json({ error: "Produce a valid order ID" })
+		const order = await Order.findById(orderId)
+		if (!order) return res.status(404).json({ error: "Order not found" })
+		return res.status(200).json(order)
+	} catch (error) {
+		console.log("Get single order error:", error)
+		res.status(500).json({ message: "Internal server error" })
+	}
 }
 
 const updateOrder = (req, res) => {
