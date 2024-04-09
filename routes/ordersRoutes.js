@@ -13,7 +13,7 @@ router.get("/", orderController.getAllOrders)
 router.get("/:id", orderController.getOrderById)
 
 // PUT request to update an Order by ID
-router.put("/:id", orderController.updateOrder)
+router.put("/:id", orderController.updateOrderStatusAdmin)
 
 // DELETE request to delete an Order by ID
 router.delete("/:id", orderController.deleteOrder)
