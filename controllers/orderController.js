@@ -68,7 +68,7 @@ const getAllOrders = async (req, res) => {
 
 const getOrderById = async (req, res) => {
 	try {
-		const { orderId } = req.body
+		const { orderId } = req.params
 		if (!orderId) return res.status(400).json({ error: "Produce a valid order ID" })
 		const order = await Order.findById(orderId)
 		if (!order) return res.status(404).json({ error: "Order not found" })
@@ -86,9 +86,21 @@ const updateOrder = (req, res) => {
 }
 
 const deleteOrder = async (req, res) => {
-	// try {
-	// } catch (error) {
-	// }
+	try {
+		const { orderId } = req.params
+		if (!orderId) return res.status(400).json({ error: "Produce a valid order ID" })
+
+		const deletedOrder = await Order.findByIdAndDelete(orderId)
+
+		if (!deletedOrder) {
+			return res.status(404).json({ error: "Order not found" })
+		}
+
+		return res.status(200).json({ message: "Order deleted successfully" })
+	} catch (error) {
+		console.error("Error deleting order:", error)
+		return res.status(500).json({ success: false, error: "Internal server error" })
+	}
 }
 
 module.exports = {
