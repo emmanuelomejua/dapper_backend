@@ -4,6 +4,9 @@ const { OrderItem } = require("../models/orderItem")
 const createOrder = async (req, res) => {
 	try {
 		const { orderItems } = req.body
+		// The best way to send this data from frontend is by sending the user's cart.
+		//This way, the orderItems will be an array that contains object of both productId and quantity.
+
 		const { userId } = req.user
 
 		const orderItemIds = Promise.all(
@@ -20,7 +23,7 @@ const createOrder = async (req, res) => {
 
 		const totalPrices = await Promise.all(
 			orderItemsIdsResolved.map(async (orderItemId) => {
-				const orderItem = await OrderItem.findById(orderItemId).populate("product", "price")
+				const orderItem = await OrderItem.findById(orderItemId).populate("product")
 				const totalPrice = orderItem.product.price * orderItem.quantity
 				return totalPrice
 			})
@@ -33,16 +36,14 @@ const createOrder = async (req, res) => {
 			user: userId,
 		})
 
-		console.log(order)
+		order = await order.save()
 
-		// order = await order.save()
-
-		// if (!order) {
-		// 	return res.status(400).json({
-		// 		success: false,
-		// 		message: "Order could not be created.",
-		// 	})
-		// }
+		if (!order) {
+			return res.status(400).json({
+				success: false,
+				message: "Order could not be created.",
+			})
+		}
 
 		res.status(200).json({ success: true, authUrl, message: "Order created successfully." })
 	} catch (error) {
