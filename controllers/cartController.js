@@ -1,4 +1,4 @@
-const Cart = require("./models/Cart"); // Assuming the Cart model is defined in a separate file
+const Cart = require("../models/cart"); // Assuming the Cart model is defined in a separate file
 
 const addToCart = async (req, res) => {
   try {

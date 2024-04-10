@@ -1,5 +1,8 @@
-const Product = require("../model/product");
-const { productValidator, editProductValidator } = require("../utils/validator");
+const Product = require("../models/products");
+const {
+  productValidator,
+  editProductValidator,
+} = require("../utils/validator");
 const cloudinaryUploadImage = require("../utils/cloudinary");
 const fs = require("fs");
 
@@ -57,6 +60,7 @@ const productImagesUpload = async (req, res) => {
       const { path } = file;
       const newPath = await uploader(path);
       urls.push(newPath);
+      console.log(path);
       fs.unlinkSync(path);
     }
 
