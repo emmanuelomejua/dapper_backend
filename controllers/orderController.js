@@ -9,7 +9,8 @@ const createOrder = async (req, res) => {
 		// The best way to send this data from frontend is by sending the user's cart.
 		//This way, the orderItems will be an array that contains object of both productId and quantity.
 
-		const { userId } = req.body
+		// I need to implement a middleware here that verifies if a user is logged in. I won't be able to do that unless auth-register works well
+		const { userId } = req.user
 
 		const orderItemIds = Promise.all(
 			orderItems.map(async (orderItem) => {
@@ -75,6 +76,19 @@ const getOrderById = async (req, res) => {
 		const order = await Order.findById(orderId)
 		if (!order) return res.status(404).json({ error: "Order not found" })
 		console.log(order.toJSON())
+		return res.status(200).json(order)
+	} catch (error) {
+		console.log("Get single order error:", error)
+		res.status(500).json({ message: "Internal server error" })
+	}
+}
+
+const getOrderByUserId = async (req, res) => {
+	try {
+		const { userId } = req.params
+		if (!userId) return res.status(400).json({ error: "Produce a valid user ID" })
+		const order = await Order.find({ user: userId })
+		if (!order) return res.status(404).json({ error: "Order not found" })
 		return res.status(200).json(order)
 	} catch (error) {
 		console.log("Get single order error:", error)
@@ -152,6 +166,7 @@ module.exports = {
 	createOrder,
 	getAllOrders,
 	getOrderById,
+	getOrderByUserId,
 	updateOrderStatusAdmin,
 	deleteOrder,
 }
