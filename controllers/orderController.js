@@ -1,5 +1,6 @@
-const { Order } = require("../models")
-const { OrderItem } = require("../models/orderItem")
+const models = require("../models")
+const Order = models.Order
+const OrderItem = models.OrderItem
 const cron = require("node-cron")
 
 const createOrder = async (req, res) => {
@@ -8,7 +9,7 @@ const createOrder = async (req, res) => {
 		// The best way to send this data from frontend is by sending the user's cart.
 		//This way, the orderItems will be an array that contains object of both productId and quantity.
 
-		const { userId } = req.user
+		const { userId } = req.body
 
 		const orderItemIds = Promise.all(
 			orderItems.map(async (orderItem) => {
@@ -46,7 +47,7 @@ const createOrder = async (req, res) => {
 			})
 		}
 
-		res.status(201).json({ message: "Order created successfully." })
+		res.status(201).json({ message: "Order created successfully.", order })
 	} catch (error) {
 		console.log("Create order error", error)
 		res.status(500).json({
@@ -73,6 +74,7 @@ const getOrderById = async (req, res) => {
 		if (!orderId) return res.status(400).json({ error: "Produce a valid order ID" })
 		const order = await Order.findById(orderId)
 		if (!order) return res.status(404).json({ error: "Order not found" })
+		console.log(order.toJSON())
 		return res.status(200).json(order)
 	} catch (error) {
 		console.log("Get single order error:", error)

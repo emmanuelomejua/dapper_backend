@@ -10,12 +10,12 @@ router.post("/", orderController.createOrder)
 router.get("/", orderController.getAllOrders)
 
 // GET request to fetch a single Order by ID
-router.get("/:id", orderController.getOrderById)
+router.get("/:orderId", orderController.getOrderById)
 
-// PUT request to update an Order by ID
-router.put("/:id", orderController.updateOrderStatusAdmin)
+// PUT request to update an Order by orderId
+router.put("/:orderId", orderController.updateOrderStatusAdmin)
 
-// DELETE request to delete an Order by ID
-router.delete("/:id", orderController.deleteOrder)
+// DELETE request to delete an Order by orderId
+router.delete("/:orderId", orderController.deleteOrder)
 
 module.exports = router
