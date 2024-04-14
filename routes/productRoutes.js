@@ -1,27 +1,23 @@
 const express = require("express")
 
-const { uploadImage, productImageResize } = require("../middlewares/multer")
-
+const { uploadImage, productImageResize } = require("../middleware/multer")
 const controllers = require("../controllers")
 const productController = controllers.productController
+const { authAdmin } = require("../middleware/authAdmin")
 
-const { getProducts, filterProducts, productUpload, productImagesUpload, deleteProduct, editProduct } =
-	productController
-const { authAdmin } = require("../middlewares/authAdmin")
+const router = express.Router()
 
-const productRouter = express.Router()
-
-productRouter.get("/", getProducts)
-productRouter.get("/filter/:category", filterProducts)
-productRouter.post("/upload", authAdmin, productUpload)
-productRouter.put(
+router.get("/", productController.getProducts)
+router.get("/filter/:category", productController.filterProducts)
+router.post("/upload", authAdmin, productController.productUpload)
+router.put(
 	"/upload-images/:id",
 	authAdmin,
 	uploadImage.array("images", 5),
 	productImageResize,
-	productImagesUpload
+	productController.productImagesUpload
 )
-productRouter.put("/edit/:id", authAdmin, editProduct)
-productRouter.delete("/delete/:id", authAdmin, deleteProduct)
+router.put("/edit/:id", authAdmin, productController.editProduct)
+router.delete("/delete/:id", authAdmin, productController.deleteProduct)
 
 module.exports = router
