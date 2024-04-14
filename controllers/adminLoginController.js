@@ -1,5 +1,7 @@
 const bcrypt = require("bcryptjs")
 const generateToken = require("../controllers/authController")
+const models = require("../models")
+const User = models.User
 
 const adminLogin = async (req, res) => {
 	try {

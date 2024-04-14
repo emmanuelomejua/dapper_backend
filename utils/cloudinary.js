@@ -13,7 +13,7 @@ const cloudinaryUploadImage = async (file) => {
   return new Promise((resolve, reject) => {
     cloudinary.uploader.upload(file, (error, result) => {
       if (error) {
-        reject(error); 
+        reject(error);
         return;
       }
 
@@ -30,5 +30,4 @@ const cloudinaryUploadImage = async (file) => {
   });
 };
 
-;
 module.exports = cloudinaryUploadImage;

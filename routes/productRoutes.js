@@ -24,4 +24,4 @@ productRouter.put(
 productRouter.put("/edit/:id", authAdmin, editProduct)
 productRouter.delete("/delete/:id", authAdmin, deleteProduct)
 
-module.exports = productRouter
+module.exports = router
