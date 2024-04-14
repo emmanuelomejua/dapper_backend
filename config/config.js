@@ -1,7 +1,8 @@
-const crypto = require("crypto");
-require("dotenv").config(); //
-const jwtSecret = crypto.randomBytes(32).toString("hex");
-const jwtExpiresIn = process.env.jwtExpiresIn;
+require("dotenv").config();
+
+// Load JWT secret from environment variable or use a default value
+const jwtSecret = process.env.JWT_SECRET;
+const jwtExpiresIn = process.env.JWT_EXPIRES_IN;
 const CompanyemailConfig = {
   username: process.env.username,
   password: process.env.password,
