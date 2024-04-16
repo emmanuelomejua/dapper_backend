@@ -1,5 +1,7 @@
 require("dotenv").config();
-const jwtSecret = process.env.JWT_SECRET;
+const jwtSecret =
+  process.env.JWT_SECRET ||
+  "2baae8be9c2b22a3157a8e4be40de562893233ac3cea2390fd9217a8ef86bebf";
 const jwtExpiresIn = process.env.JWT_EXPIRES_IN;
 const CompanyemailConfig = {
   username: process.env.username,
