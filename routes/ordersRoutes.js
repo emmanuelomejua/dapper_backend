@@ -1,21 +1,29 @@
-const express = require("express");
-const router = express.Router();
-const controllers = require("../controllers");
-const orderController = controllers.orderController;
+const express = require("express")
+const router = express.Router()
+const controllers = require("../controllers")
+const orderController = controllers.orderController
 
 // POST request to create a new Order
-router.post("/", orderController.createOrder);
+router.post("/", orderController.createOrder)
 
 // GET request to fetch all Orders
-router.get("/", orderController.getAllOrders);
+// I need to implement a middleware here that verifies if a user is logged in. I won't be able to do that unless auth-register works well and is an admin
+router.get("/", orderController.getAllOrders)
 
 // GET request to fetch a single Order by ID
-router.get("/:id", orderController.getOrderById);
+// I need to implement a middleware here that verifies if a user is logged in. I won't be able to do that unless auth-register works well and is an admin
+router.get("/:orderId", orderController.getOrderById)
 
-// PUT request to update an Order by ID
-router.put("/:id", orderController.updateOrder);
+// GET request to fetch a single Order by userID
+// I need to implement a middleware here that verifies if a user is logged in. I won't be able to do that unless auth-register works well
+router.get("/user/:userId", orderController.getOrderByUserId)
 
-// DELETE request to delete an Order by ID
-router.delete("/:id", orderController.deleteOrder);
+// PUT request to update an Order by orderId
+// I need to implement a middleware here that verifies if a user is logged in. I won't be able to do that unless auth-register works well and is an admin
+router.put("/:orderId", orderController.updateOrderStatusAdmin)
 
-module.exports = router;
+// DELETE request to delete an Order by orderId
+// I need to implement a middleware here that verifies if a user is logged in. I won't be able to do that unless auth-register works well and is an admin
+router.delete("/:orderId", orderController.deleteOrder)
+
+module.exports = router
